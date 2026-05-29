@@ -621,12 +621,22 @@ final class DSkillerStatusApp: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .medium)
         let line = "\(timestamp) \(message)\n"
         let url = URL(fileURLWithPath: path)
-        try? FileManager.default.createDirectory(
+        let fm = FileManager.default
+        try? fm.createDirectory(
             at: url.deletingLastPathComponent(),
             withIntermediateDirectories: true
         )
+        
+        // Auto-clear historical logs from yesterday or earlier
+        if fm.fileExists(atPath: url.path),
+           let attrs = try? fm.attributesOfItem(atPath: url.path),
+           let modDate = attrs[.modificationDate] as? Date,
+           !Calendar.current.isDateInToday(modDate) {
+            try? "".write(to: url, atomically: true, encoding: .utf8)
+        }
+
         if let data = line.data(using: .utf8) {
-            if FileManager.default.fileExists(atPath: url.path),
+            if fm.fileExists(atPath: url.path),
                let handle = try? FileHandle(forWritingTo: url) {
                 _ = try? handle.seekToEnd()
                 try? handle.write(contentsOf: data)
