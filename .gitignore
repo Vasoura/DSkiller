@@ -1,0 +1,10 @@
+# macOS system files
+.DS_Store
+
+# Temporary generated icons
+menubar-app/Assets/*.iconset/
+menubar-app/Assets/DSStoreCleanerIcon.iconset/
+
+# Compiled apps and packages
+*.app/
+*.dmg
