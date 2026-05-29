@@ -158,6 +158,7 @@ final class DSkillerStatusApp: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(launchAtLoginMenuItem)
 
         menu.addItem(NSMenuItem.separator())
+        addMenuItem("关于 DSkiller", action: #selector(showAbout))
         addMenuItem("打开日志", action: #selector(openLogs))
 
         menu.addItem(NSMenuItem.separator())
@@ -449,6 +450,16 @@ final class DSkillerStatusApp: NSObject, NSApplicationDelegate, NSMenuDelegate {
             .replacingOccurrences(of: ">", with: "&gt;")
             .replacingOccurrences(of: "\"", with: "&quot;")
             .replacingOccurrences(of: "'", with: "&apos;")
+    }
+
+    @objc private func showAbout() {
+        let alert = NSAlert()
+        alert.messageText = "关于 DSkiller"
+        alert.informativeText = "Swift 原生的 macOS 菜单栏小工具，常驻后台实时自动清理指定目录下的 .DS_Store 垃圾文件。"
+        alert.alertStyle = .informational
+        alert.addButton(withTitle: "确定")
+        NSApp.activate(ignoringOtherApps: true)
+        alert.runModal()
     }
 
     @objc private func openLogs() {
