@@ -664,6 +664,16 @@ final class DSkillerStatusApp: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 }
 
+final class LogWindow: NSWindow {
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        if event.modifierFlags.contains(.command) && event.charactersIgnoringModifiers?.lowercased() == "w" {
+            self.performClose(nil)
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
+}
+
 final class LogWindowController: NSWindowController, NSWindowDelegate {
     private let logPaths: [String]
     private var textView: NSTextView!
@@ -674,7 +684,7 @@ final class LogWindowController: NSWindowController, NSWindowDelegate {
     init(logPaths: [String]) {
         self.logPaths = logPaths
 
-        let window = NSWindow(
+        let window = LogWindow(
             contentRect: NSRect(x: 0, y: 0, width: 900, height: 560),
             styleMask: [.titled, .closable, .miniaturizable, .resizable],
             backing: .buffered,
